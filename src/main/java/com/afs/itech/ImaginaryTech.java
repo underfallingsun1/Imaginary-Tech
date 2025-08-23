@@ -1,8 +1,11 @@
 package com.afs.itech;
 
-import com.afs.itech.blocks.IBlocks;
-import com.afs.itech.items.IDataComponents;
-import com.afs.itech.items.IItems;
+import com.afs.itech.blocks.MBlocks;
+import com.afs.itech.blocks.blockEntities.MBlockEntityTypes;
+import com.afs.itech.energySystem.CrystalWorkingEnvironment;
+import com.afs.itech.energySystem.EnergyCrystalType;
+import com.afs.itech.items.MDataComponents;
+import com.afs.itech.items.MItems;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -11,7 +14,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
-import org.checkerframework.checker.signature.qual.SignatureUnknown;
+import net.neoforged.neoforge.registries.DataPackRegistryEvent;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 import org.slf4j.Logger;
 
 @Mod(Meta.MODID)
@@ -20,15 +24,27 @@ public class ImaginaryTech {
 
     public ImaginaryTech(IEventBus bus, ModContainer container) {
         LOGGER.info("mod " + Meta.MODID + " start to load.");
-        IBlocks.BLOCKS.register(bus);
-        IBlocks.BLOCK_TYPES.register(bus);
-        IItems.ITEMS.register(bus);
-        IItems.TABS.register(bus);
-        IDataComponents.DATA_COMPONENTS_TYPES.register(bus);
+        MBlocks.BLOCKS.register(bus);
+        MBlocks.BLOCK_TYPES.register(bus);
+        MBlockEntityTypes.BE_TYPES.register(bus);
+        MItems.ITEMS.register(bus);
+        MItems.TABS.register(bus);
+        MDataComponents.DATA_COMPONENTS_TYPES.register(bus);
+
+        CrystalWorkingEnvironment.ENVIRONMENTS.register(bus);
     }
 
     @EventBusSubscriber(modid = Meta.MODID)
     private static class LoadEvents{
+        @SubscribeEvent
+        public static void addNewRegistry(NewRegistryEvent e){
+            e.register(CrystalWorkingEnvironment.ENVIRONMENT);
+        }
+
+        public static void addDataPackRegistry(DataPackRegistryEvent.NewRegistry e){
+            e.dataPackRegistry(EnergyCrystalType.REGISTRY_KEY, EnergyCrystalType.CODEC, EnergyCrystalType.CODEC);
+        }
+
         @SubscribeEvent
         public static void onCommonSetup(FMLCommonSetupEvent e){
 

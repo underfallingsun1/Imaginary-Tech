@@ -7,7 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-public class IItems {
+public class MItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Meta.MODID);
 
 

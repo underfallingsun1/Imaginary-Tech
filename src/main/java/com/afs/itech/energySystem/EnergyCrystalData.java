@@ -1,53 +1,41 @@
 package com.afs.itech.energySystem;
 
-import com.afs.itech.utils.LangComponents;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public record EnergyCrystalData(
+        String type,
         int durability,
-        int maxDurability,
-        int baseEnergyRate,
-        int maxEnergyRate,
-        double naturalDamageRate,
-        double workingDamageRate,
-        double baseEfficiency
-)
-{
-    public static final Codec<EnergyCrystalData> CODEC = RecordCodecBuilder.create(
-            inst -> inst.group(
-                    Codec.INT.fieldOf("durability").forGetter(EnergyCrystalData::durability),
-                    Codec.INT.fieldOf("max_durability").forGetter(EnergyCrystalData::maxDurability),
-                    Codec.INT.fieldOf("base_energy_rate").forGetter(EnergyCrystalData::baseEnergyRate),
-                    Codec.INT.fieldOf("max_energy_rate").forGetter(EnergyCrystalData::maxEnergyRate),
-                    Codec.DOUBLE.fieldOf("natural_damage_speed").forGetter(EnergyCrystalData::naturalDamageRate),
-                    Codec.DOUBLE.fieldOf("working_damage_speed").forGetter(EnergyCrystalData::workingDamageRate),
-                    Codec.DOUBLE.fieldOf("base_efficiency").forGetter(EnergyCrystalData::baseEfficiency)
-            ).apply(inst, EnergyCrystalData::new)
-    );
+        int ProductionRateModifier,
+        List<Double> DamageChanceModifier
+) {
+    public static final Random RANDOM = new Random();
 
-    public static final StreamCodec<ByteBuf, EnergyCrystalData> STREAM_CODEC = StreamCodec.ofMember(
-            (data, o) -> {
-                ByteBufCodecs.INT.encode(o, data.durability);
-                ByteBufCodecs.INT.encode(o, data.maxDurability);
-                ByteBufCodecs.INT.encode(o, data.baseEnergyRate);
-                ByteBufCodecs.INT.encode(o, data.maxEnergyRate);
-                ByteBufCodecs.DOUBLE.encode(o, data.naturalDamageRate);
-                ByteBufCodecs.DOUBLE.encode(o, data.workingDamageRate);
-                ByteBufCodecs.DOUBLE.encode(o, data.baseEfficiency);
-            },
-            o -> new EnergyCrystalData(
-                    ByteBufCodecs.INT.decode(o), ByteBufCodecs.INT.decode(o), ByteBufCodecs.INT.decode(o),
-                    ByteBufCodecs.INT.decode(o), ByteBufCodecs.DOUBLE.decode(o), ByteBufCodecs.DOUBLE.decode(o),
-                    ByteBufCodecs.DOUBLE.decode(o)
-            )
-    );
-    public Component asComponent(){
-        return LangComponents.ENERGY_CRYSTAL_TIPS.apply(durability, (float)durability / maxDurability * 100,
-                baseEnergyRate, maxEnergyRate, naturalDamageRate, workingDamageRate, (float)baseEfficiency * 100);
+    public static List<Double> modify(List<Double> base, List<Double> extra){
+        int p = base.size(), q = extra.size(), m = Math.max(p, q);
+        List<Double> result = new ArrayList<>();
+        for(int i = 0; i < m; i ++){
+            double baseV = (i < p? base.get(i): 0);
+            double extraV = (i < q? extra.get(i): 0);
+            double value = baseV + extraV;
+            if(value < 0) value = 0;
+            else if(value > 1) value = 1;
+            result.add(value);
+        }
+        for(int endI = m - 1; endI >= 0; endI --){
+            if(result.get(endI) == 0) result.remove(endI);
+            else break;
+        }
+        return result;
+    }
+
+    public static int getDamage(List<Double> chance){
+        double value = RANDOM.nextDouble();
+        int i = 0, j = chance.size();
+        while(value > 0 && i < chance.size()){
+            value -= chance.get(i);
+        }
+        return i - 1;
     }
 }
