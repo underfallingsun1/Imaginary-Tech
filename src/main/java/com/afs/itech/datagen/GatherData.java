@@ -28,7 +28,7 @@ public class GatherData {
         CompletableFuture<HolderLookup.Provider> registries = e.getLookupProvider();
 
         RegistrySetBuilder builder = new RegistrySetBuilder();
-        new EnergyCrystalTypeDataGenerator(builder).register();
+        new EnergyCrystalTypeDataGenerator(builder).addEntries();
         generator.addProvider(e.includeServer(), new DatapackBuiltinEntriesProvider(
                 output, registries, builder, Set.of(Meta.MODID)
         ));

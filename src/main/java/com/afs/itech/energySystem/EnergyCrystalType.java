@@ -20,7 +20,7 @@ public record EnergyCrystalType(
                     Codec.INT.fieldOf("durability").forGetter(EnergyCrystalType::maxDurability),
                     Codec.INT.fieldOf("base_produce_rate").forGetter(EnergyCrystalType::baseProductionRate),
                     Codec.INT.fieldOf("capacity").forGetter(EnergyCrystalType::capacity),
-                    CrystalWorkingEnvironment.Environment.CODEC.optionalFieldOf("environment", CrystalWorkingEnvironment.None.NONE).forGetter(EnergyCrystalType::workingEnvironment),
+                    CrystalWorkingEnvironment.CODEC.optionalFieldOf("environment", CrystalWorkingEnvironment.None.NONE).forGetter(EnergyCrystalType::workingEnvironment),
                     Codec.DOUBLE.listOf().fieldOf("damageChance").forGetter(EnergyCrystalType::DamageChance)
             ).apply(inst, EnergyCrystalType::new)
     );

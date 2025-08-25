@@ -1,15 +1,20 @@
 package com.afs.itech.energySystem;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public record EnergyCrystalData(
-        String type,
+        EnergyCrystalType type,
         int durability,
         int ProductionRateModifier,
         List<Double> DamageChanceModifier
 ) {
+
+
     public static final Random RANDOM = new Random();
 
     public static List<Double> modify(List<Double> base, List<Double> extra){

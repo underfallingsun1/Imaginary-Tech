@@ -41,6 +41,7 @@ public class ImaginaryTech {
             e.register(CrystalWorkingEnvironment.ENVIRONMENT);
         }
 
+        @SubscribeEvent
         public static void addDataPackRegistry(DataPackRegistryEvent.NewRegistry e){
             e.dataPackRegistry(EnergyCrystalType.REGISTRY_KEY, EnergyCrystalType.CODEC, EnergyCrystalType.CODEC);
         }
