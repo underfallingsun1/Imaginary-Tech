@@ -5,8 +5,6 @@ import net.minecraft.network.chat.Component;
 import java.util.Objects;
 
 public class LangComponents {
-    public static final LangComponentBase ENERGY_CRYSTAL_TIPS = new LangComponentBase("tips.imaginarytech.energy_crystal");
-
     public static class LangComponentBase{
         private final String base;
 
@@ -26,4 +24,6 @@ public class LangComponents {
             return Component.translatable(base, values);
         }
     }
+
+    public static final LangComponentBase TAB_TITLE = new LangComponentBase("title.tab.imaginarytech");
 }

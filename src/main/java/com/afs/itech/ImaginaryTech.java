@@ -2,8 +2,6 @@ package com.afs.itech;
 
 import com.afs.itech.blocks.MBlocks;
 import com.afs.itech.blocks.blockEntities.MBlockEntityTypes;
-import com.afs.itech.energySystem.CrystalWorkingEnvironment;
-import com.afs.itech.energySystem.EnergyCrystalType;
 import com.afs.itech.items.MDataComponents;
 import com.afs.itech.items.MItems;
 import com.mojang.logging.LogUtils;
@@ -30,20 +28,17 @@ public class ImaginaryTech {
         MItems.ITEMS.register(bus);
         MItems.TABS.register(bus);
         MDataComponents.DATA_COMPONENTS_TYPES.register(bus);
-
-        CrystalWorkingEnvironment.ENVIRONMENTS.register(bus);
     }
 
     @EventBusSubscriber(modid = Meta.MODID)
     private static class LoadEvents{
         @SubscribeEvent
         public static void addNewRegistry(NewRegistryEvent e){
-            e.register(CrystalWorkingEnvironment.ENVIRONMENT);
         }
 
         @SubscribeEvent
         public static void addDataPackRegistry(DataPackRegistryEvent.NewRegistry e){
-            e.dataPackRegistry(EnergyCrystalType.REGISTRY_KEY, EnergyCrystalType.CODEC, EnergyCrystalType.CODEC);
+
         }
 
         @SubscribeEvent
